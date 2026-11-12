@@ -465,6 +465,7 @@ async function copy(value) {
   catch { toast(t('复制未获允许，请选中色值后手动复制')); $('hex-input').focus(); $('hex-input').select(); }
 }
 $('copy-hex').addEventListener('click', () => copy(colorHex));
+$('mobile-copy-color').addEventListener('click', () => copy(colorHex));
 $('copy-rgb').addEventListener('click', () => copy(`rgb(${colorRgb.join(', ')})`));
 $('copy-hsl').addEventListener('click', () => copy(`hsl(${colorHsl[0]}, ${colorHsl[1]}%, ${colorHsl[2]}%)`));
 for (const format of ['rgb', 'hsl']) {
@@ -594,6 +595,10 @@ $('library-more').addEventListener('click', () => { libraryLimit += 72; renderLi
 const sidebar = document.querySelector('.sidebar');
 const mobile = matchMedia('(max-width: 760px)');
 function syncSidebar() {
+  const card = $('color-card');
+  const target = mobile.matches ? $('mobile-color-slot') : document.querySelector('.current-section');
+  if (card.parentElement !== target) target.prepend(card);
+  $('mobile-color-slot').inert = mobile.matches && sidebar.classList.contains('open');
   sidebar.inert = mobile.matches && !sidebar.classList.contains('open');
   $('mobile-sidebar').setAttribute('aria-expanded', String(!sidebar.inert));
 }

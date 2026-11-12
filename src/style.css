@@ -76,7 +76,9 @@
   .selection span { position: absolute; top: 43px; left: 50%; transform: translateX(-50%); padding: 8px 12px; border-radius: 12px; color: #fff; background: #25202dba; backdrop-filter: blur(12px); font: 500 11px ui-monospace, "SFMono-Regular", monospace; letter-spacing: .5px; box-shadow: 0 4px 14px #0001; }
   .hover-color { position: absolute; top: 0; left: 0; display: none; align-items: center; gap: 8px; padding: 8px 10px 8px 8px; pointer-events: none; border: 1px solid #ffffff55; border-radius: 12px; background: #fffef5eb; color: #28242d; box-shadow: 0 3px 18px #0002; font: 11px ui-monospace, monospace; }
   .hover-color i { display: block; width: 18px; height: 18px; border-radius: 50%; border: 1px solid #0001; }
-  .hub { position: absolute; bottom: 28px; left: 28px; right: 28px; display: flex; align-items: center; gap: 16px; pointer-events: none; }
+  .picker-dock { position: absolute; bottom: 28px; left: 28px; right: 28px; display: flex; flex-direction: column; gap: 12px; pointer-events: none; }
+  .hub { display: flex; align-items: center; gap: 16px; pointer-events: none; }
+  .mobile-color-slot, #mobile-copy-color, .mobile-tools-label { display: none; }
   .hue-hub, .zoom-hub { min-height: 56px; border-radius: 20px; background: rgb(38 37 44 / 58%); color: #f6f3fa; box-shadow: 0 4px 18px #00000014, inset 0 1px 0 #ffffff06; border: 1px solid #ffffff21; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); pointer-events: auto; --md-icon-button-icon-color: #f6f3fa; --md-icon-button-disabled-icon-color: #f6f3fa; --md-icon-button-hover-state-layer-color: #fff; --md-icon-button-pressed-state-layer-color: #fff; --md-icon-button-focus-state-layer-color: #fff; }
   .hue-row { display: flex; flex: 1; min-width: 0; gap: 18px; align-items: center; padding: 12px 20px; }
   .hue-row label, .hue-row output { font-size: 18px; font-weight: 600; line-height: 1.4; letter-spacing: -.3px; }
@@ -225,7 +227,8 @@
     .app { grid-template-columns: minmax(0,1fr) 320px; }
     .sidebar-content { padding: 16px 20px; }
     .brand-row { padding: 0 18px; }
-    .hub { left: 16px; right: 16px; gap: 12px; bottom: 18px; }
+    .picker-dock { left: 16px; right: 16px; bottom: 18px; }
+    .hub { gap: 12px; }
     .hue-row { gap: 12px; padding: 12px 16px; }
   }
   @media (max-width: 760px) {
@@ -236,7 +239,7 @@
     #close-sidebar { display: inline-flex; }
     .brand-row { gap: 6px; }
     .brand { flex: 1; }
-    .hub { bottom: max(18px, env(safe-area-inset-bottom)); }
+    .picker-dock { bottom: max(18px, env(safe-area-inset-bottom)); }
     .selection span { font-size: 10px; }
     .toast { width: max-content; max-width: 90vw; bottom: 160px; }
   }
@@ -245,7 +248,8 @@
     .library-swatch { height: 62px; }
     #color-library { width: calc(100vw - 20px); }
     #library-results-count { width: 100%; }
-    .hub { gap: 8px; left: 12px; right: 12px; }
+    .picker-dock { left: 12px; right: 12px; }
+    .hub { gap: 8px; }
     .hue-row { gap: 10px; padding: 12px; }
     .hue-row output { display: none; }
     .zoom-hub { padding: 4px 5px; }
@@ -335,4 +339,23 @@
   .active-tool-heading button:hover { background: var(--card); }
   .active-tool-heading svg { width: 16px; height: 16px; }
   .studio-tools[hidden], .tool-panel[hidden] { display: none; }
+}
+
+@layer responsive {
+  @media (max-width: 760px) {
+    #eyedropper, #fullscreen, .zoom-controls .control-divider { display: none; }
+    .mobile-color-slot { display: block; pointer-events: auto; }
+    .mobile-color-slot .color-card { height: auto; min-height: 124px; padding: 14px 18px; gap: 8px; border-radius: 22px; box-shadow: 0 6px 24px #0002, inset 0 0 0 1px #ffffff25; }
+    .mobile-color-slot .swatch-actions { gap: 4px; }
+    .mobile-color-slot .swatch-actions button { width: 40px; height: 40px; }
+    .mobile-color-slot .color-name { max-width: calc(100% - 92px); }
+    .mobile-color-slot .swatch-bottom { align-items: center; }
+    .mobile-color-slot #hero-hex { font-size: 28px; }
+    .mobile-color-slot #swatch-flower { display: none; }
+    #mobile-copy-color { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #ffffff25; color: inherit; }
+    #mobile-copy-color:hover { background: #ffffff55; }
+    #mobile-copy-color svg { width: 18px; height: 18px; }
+    .mobile-tools-label { display: block; font-size: 12px; color: var(--muted); }
+    .toast { bottom: auto; top: max(78px, calc(env(safe-area-inset-top) + 60px)); }
+  }
 }

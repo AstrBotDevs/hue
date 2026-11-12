@@ -15,6 +15,8 @@
         <div id="selection" class="selection" aria-hidden="true"><span id="selection-label">#8B7AE8</span></div>
         <div id="hover-color" class="hover-color" aria-hidden="true"><i></i><span></span></div>
         <button id="mobile-sidebar" class="mobile-sidebar" aria-label="打开颜色面板" data-i18n-aria-label="打开颜色面板" data-icon="panel"></button>
+        <div class="picker-dock">
+          <div id="mobile-color-slot" class="mobile-color-slot"></div>
         <div class="hub" aria-label="色相与缩放控制" data-i18n-aria-label="色相与缩放控制">
           <div class="hue-row hue-hub">
             <label for="hue" data-i18n="色相">色相</label>
@@ -31,6 +33,7 @@
             </div>
           </div>
         </div>
+        </div>
       </section>
 
       <aside class="sidebar" aria-label="当前颜色与配色灵感" data-i18n-aria-label="当前颜色与配色灵感">
@@ -44,7 +47,7 @@
           <section class="current-section" aria-label="当前颜色" data-i18n-aria-label="当前颜色">
             <div id="color-card" class="color-card">
               <div class="swatch-top"><button id="color-family" class="color-name" title="在颜色大全中探索" data-i18n-title="在颜色大全中探索" data-i18n="匹配颜色名称">匹配颜色名称</button><div class="swatch-actions"><button id="share-color" aria-label="分享与导出" data-i18n-aria-label="分享与导出" title="分享与导出" data-i18n-title="分享与导出" data-icon="share"></button><button id="save-color" aria-label="收藏当前颜色" data-i18n-aria-label="收藏当前颜色" title="收藏当前颜色" data-i18n-title="收藏当前颜色" data-icon="bookmark"></button></div></div>
-              <div class="swatch-bottom"><strong id="hero-hex">#8B7AE8</strong><span id="swatch-flower" aria-hidden="true">✳</span></div>
+              <div class="swatch-bottom"><strong id="hero-hex">#8B7AE8</strong><button id="mobile-copy-color" aria-label="复制 HEX 色值" data-i18n-aria-label="复制 HEX 色值" title="复制 HEX" data-i18n-title="复制 HEX" data-icon="copy"></button><span id="swatch-flower" aria-hidden="true">✳</span></div>
             </div>
             <div class="hex-field">
               <label for="hex-input">HEX</label>
@@ -56,6 +59,7 @@
               <div class="value-field"><label for="hsl-value">HSL</label><input id="hsl-value" value="249°,71%,69%" aria-label="输入 HSL 色值" data-i18n-aria-label="输入 HSL 色值" title="H,S%,L%，色相 0–360，饱和度与亮度 0–100" data-i18n-title="H,S%,L%，色相 0–360，饱和度与亮度 0–100" spellcheck="false" autocomplete="off" maxlength="48" /><button id="copy-hsl" title="复制 HSL" data-i18n-title="复制 HSL" aria-label="复制 HSL 色值" data-i18n-aria-label="复制 HSL 色值" data-icon="copy"></button></div>
             </div>
             <div class="picker-actions">
+              <span class="mobile-tools-label" data-i18n="色彩工具">色彩工具</span>
               <md-filled-tonal-button id="eyedropper"><span slot="icon" data-icon="pipette"></span><span data-i18n="从屏幕取色">从屏幕取色</span></md-filled-tonal-button>
               <md-icon-button id="tools-toggle" aria-haspopup="menu" aria-controls="tools-menu" aria-expanded="false" aria-label="色彩工具" data-i18n-aria-label="色彩工具" title="色彩工具" data-i18n-title="色彩工具"><span data-icon="menu"></span></md-icon-button>
               <md-menu id="tools-menu" anchor="tools-toggle" positioning="popover" anchor-corner="end-end" menu-corner="start-end" aria-label="色彩工具" data-i18n-aria-label="色彩工具">
