@@ -1,0 +1,626 @@
+[
+  {
+    "id": "iris",
+    "name": "鸢尾来信",
+    "en": "Iris Letter",
+    "category": "柔和",
+    "colors": [
+      "#534572",
+      "#8B7AE8",
+      "#C7B9F3",
+      "#E9DFF5",
+      "#F5F0E8"
+    ]
+  },
+  {
+    "id": "garden",
+    "name": "午后花园",
+    "en": "Slow Garden",
+    "category": "自然",
+    "colors": [
+      "#38584D",
+      "#7A9C85",
+      "#D4DCC5",
+      "#F4E9CF",
+      "#DDA486"
+    ]
+  },
+  {
+    "id": "peach",
+    "name": "落日汽水",
+    "en": "Peach Fizz",
+    "category": "柔和",
+    "colors": [
+      "#A84C4C",
+      "#E99686",
+      "#F3C8A5",
+      "#F7E8C9",
+      "#8696B0"
+    ]
+  },
+  {
+    "id": "coast",
+    "name": "海岸漫步",
+    "en": "Coastal Walk",
+    "category": "自然",
+    "colors": [
+      "#294F65",
+      "#6C9BA6",
+      "#B4D5D3",
+      "#E7E4D8",
+      "#D7B897"
+    ]
+  },
+  {
+    "id": "matcha",
+    "name": "抹茶时光",
+    "en": "Matcha Break",
+    "category": "自然",
+    "colors": [
+      "#46533C",
+      "#8D9A6F",
+      "#CBD0AC",
+      "#F2EDDC",
+      "#C7A58A"
+    ]
+  },
+  {
+    "id": "berry",
+    "name": "莓果晚风",
+    "en": "Berry Dusk",
+    "category": "柔和",
+    "colors": [
+      "#542E53",
+      "#9B5D7D",
+      "#D299AF",
+      "#EDD5DF",
+      "#E9E5F3"
+    ]
+  },
+  {
+    "id": "earth",
+    "name": "大地诗篇",
+    "en": "Earth Notes",
+    "category": "自然",
+    "colors": [
+      "#514537",
+      "#94745C",
+      "#C7A586",
+      "#DDD2BD",
+      "#EDE8DF"
+    ]
+  },
+  {
+    "id": "electric",
+    "name": "蓝色电波",
+    "en": "Electric Blue",
+    "category": "鲜明",
+    "colors": [
+      "#202A5C",
+      "#5866CA",
+      "#A6B9F0",
+      "#DBE3F8",
+      "#E9EEB6"
+    ]
+  },
+  {
+    "id": "citrus",
+    "name": "柑橘假日",
+    "en": "Citrus Club",
+    "category": "自然",
+    "colors": [
+      "#465D51",
+      "#A4B68A",
+      "#F3D88C",
+      "#EDA46D",
+      "#F2E7D4"
+    ]
+  },
+  {
+    "id": "forest",
+    "name": "林间晨雾",
+    "en": "Forest Mist",
+    "category": "自然",
+    "colors": [
+      "#203F3B",
+      "#52796F",
+      "#84A98C",
+      "#CAD2C5",
+      "#F0EFE7"
+    ]
+  },
+  {
+    "id": "clay",
+    "name": "赤陶山谷",
+    "en": "Clay Valley",
+    "category": "自然",
+    "colors": [
+      "#6B392F",
+      "#A95B42",
+      "#CF8F67",
+      "#E3C3A1",
+      "#F3E8D6"
+    ]
+  },
+  {
+    "id": "alpine",
+    "name": "雪山湖泊",
+    "en": "Alpine Lake",
+    "category": "自然",
+    "colors": [
+      "#29434E",
+      "#5B8392",
+      "#9BB9BA",
+      "#D2E2DC",
+      "#F5F3EB"
+    ]
+  },
+  {
+    "id": "sakura",
+    "name": "樱花牛乳",
+    "en": "Sakura Milk",
+    "category": "柔和",
+    "colors": [
+      "#8E6E86",
+      "#C59AAA",
+      "#EBCBD5",
+      "#F8E8E7",
+      "#F7F1E8"
+    ]
+  },
+  {
+    "id": "cloud",
+    "name": "云间蓝调",
+    "en": "Cloud Study",
+    "category": "柔和",
+    "colors": [
+      "#626E97",
+      "#A4B2D0",
+      "#CDD7EC",
+      "#E8E9F3",
+      "#F6F2EB"
+    ]
+  },
+  {
+    "id": "butter",
+    "name": "黄油曲奇",
+    "en": "Butter Cookie",
+    "category": "柔和",
+    "colors": [
+      "#957C62",
+      "#C7AC85",
+      "#E8D6AB",
+      "#F7EDCE",
+      "#FBF7ED"
+    ]
+  },
+  {
+    "id": "lilac",
+    "name": "丁香薄荷",
+    "en": "Lilac Mint",
+    "category": "柔和",
+    "colors": [
+      "#7D7E9B",
+      "#B9B1D6",
+      "#DCD2E9",
+      "#C1DAD2",
+      "#EEF3E5"
+    ]
+  },
+  {
+    "id": "apricot",
+    "name": "杏色清晨",
+    "en": "Apricot Dawn",
+    "category": "柔和",
+    "colors": [
+      "#B18A89",
+      "#D7AC9C",
+      "#EBCDB6",
+      "#F4E4CD",
+      "#D6DCD2"
+    ]
+  },
+  {
+    "id": "bauhaus",
+    "name": "原色构成",
+    "en": "Primary Study",
+    "category": "鲜明",
+    "colors": [
+      "#223C8E",
+      "#E34538",
+      "#F8CB45",
+      "#F4F0E5",
+      "#22262B"
+    ]
+  },
+  {
+    "id": "pool",
+    "name": "泳池派对",
+    "en": "Pool Party",
+    "category": "鲜明",
+    "colors": [
+      "#005F73",
+      "#0A9396",
+      "#94D2BD",
+      "#E9D8A6",
+      "#EE9B00"
+    ]
+  },
+  {
+    "id": "punch",
+    "name": "莓橙碰撞",
+    "en": "Berry Punch",
+    "category": "鲜明",
+    "colors": [
+      "#572D86",
+      "#B14CA6",
+      "#EF6C86",
+      "#FFAB59",
+      "#F9E78B"
+    ]
+  },
+  {
+    "id": "lime",
+    "name": "青柠电流",
+    "en": "Lime Current",
+    "category": "鲜明",
+    "colors": [
+      "#182B34",
+      "#4264D0",
+      "#BFEA53",
+      "#E8F1BC",
+      "#F4F4E7"
+    ]
+  },
+  {
+    "id": "fiesta",
+    "name": "热带节拍",
+    "en": "Tropical Beat",
+    "category": "鲜明",
+    "colors": [
+      "#12665B",
+      "#35A88D",
+      "#F5C451",
+      "#F0714E",
+      "#C13E57"
+    ]
+  },
+  {
+    "id": "cobalt",
+    "name": "钴蓝与柿",
+    "en": "Cobalt Persimmon",
+    "category": "鲜明",
+    "colors": [
+      "#2437A3",
+      "#5A77DA",
+      "#F3E7D4",
+      "#F8A24A",
+      "#E75B35"
+    ]
+  },
+  {
+    "id": "pop",
+    "name": "糖果波普",
+    "en": "Candy Pop",
+    "category": "鲜明",
+    "colors": [
+      "#6239A6",
+      "#AA6DD4",
+      "#ED89B5",
+      "#F4C15C",
+      "#71B5B0"
+    ]
+  },
+  {
+    "id": "vinyl",
+    "name": "黑胶唱片",
+    "en": "Vinyl Room",
+    "category": "复古",
+    "colors": [
+      "#343532",
+      "#726751",
+      "#A59A73",
+      "#D9C7A0",
+      "#C36E4B"
+    ]
+  },
+  {
+    "id": "seventies",
+    "name": "七十年代",
+    "en": "Seventies",
+    "category": "复古",
+    "colors": [
+      "#4F563F",
+      "#97965B",
+      "#D7BA65",
+      "#CE8147",
+      "#9C4F3C"
+    ]
+  },
+  {
+    "id": "diner",
+    "name": "公路餐厅",
+    "en": "Roadside Diner",
+    "category": "复古",
+    "colors": [
+      "#31585C",
+      "#6E9693",
+      "#EFE3C8",
+      "#D98974",
+      "#AD4B46"
+    ]
+  },
+  {
+    "id": "cinema",
+    "name": "旧日影院",
+    "en": "Old Cinema",
+    "category": "复古",
+    "colors": [
+      "#382B36",
+      "#75434B",
+      "#B77367",
+      "#DCB99A",
+      "#EFE2CD"
+    ]
+  },
+  {
+    "id": "poster",
+    "name": "旅行海报",
+    "en": "Travel Poster",
+    "category": "复古",
+    "colors": [
+      "#2D5370",
+      "#6D96A3",
+      "#E3CFA2",
+      "#D99A56",
+      "#B85B42"
+    ]
+  },
+  {
+    "id": "library",
+    "name": "旧书藏馆",
+    "en": "Old Library",
+    "category": "复古",
+    "colors": [
+      "#3E443B",
+      "#717455",
+      "#A89972",
+      "#D4C8A9",
+      "#E9E2D2"
+    ]
+  },
+  {
+    "id": "radio",
+    "name": "黄铜收音机",
+    "en": "Brass Radio",
+    "category": "复古",
+    "colors": [
+      "#313C41",
+      "#5E7478",
+      "#B49D6D",
+      "#D7C69F",
+      "#EAE3D1"
+    ]
+  },
+  {
+    "id": "film",
+    "name": "胶片玫瑰",
+    "en": "Film Rose",
+    "category": "复古",
+    "colors": [
+      "#55414A",
+      "#906873",
+      "#BE9394",
+      "#DBC0B8",
+      "#ECE1D5"
+    ]
+  },
+  {
+    "id": "midnight",
+    "name": "午夜霓虹",
+    "en": "Midnight Neon",
+    "category": "深色",
+    "colors": [
+      "#111321",
+      "#25263F",
+      "#514A7E",
+      "#A092D9",
+      "#E2C9E8"
+    ]
+  },
+  {
+    "id": "abyss",
+    "name": "深海微光",
+    "en": "Deep Sea",
+    "category": "深色",
+    "colors": [
+      "#0B1820",
+      "#18323E",
+      "#285567",
+      "#609C9C",
+      "#B7D9CF"
+    ]
+  },
+  {
+    "id": "ember",
+    "name": "余烬",
+    "en": "Afterglow",
+    "category": "深色",
+    "colors": [
+      "#1C1818",
+      "#3B2928",
+      "#7A4437",
+      "#C47950",
+      "#E9BD8D"
+    ]
+  },
+  {
+    "id": "obsidian",
+    "name": "黑曜金",
+    "en": "Obsidian Gold",
+    "category": "深色",
+    "colors": [
+      "#17191A",
+      "#303538",
+      "#59615D",
+      "#A9996E",
+      "#DCCCA2"
+    ]
+  },
+  {
+    "id": "nightgarden",
+    "name": "夜间花园",
+    "en": "Night Garden",
+    "category": "深色",
+    "colors": [
+      "#151F1B",
+      "#2A4034",
+      "#4E6B4E",
+      "#91A47D",
+      "#D0D6B5"
+    ]
+  },
+  {
+    "id": "velvet",
+    "name": "天鹅绒",
+    "en": "Velvet Hour",
+    "category": "深色",
+    "colors": [
+      "#211921",
+      "#483145",
+      "#79516B",
+      "#B486A0",
+      "#E2C9D5"
+    ]
+  },
+  {
+    "id": "storm",
+    "name": "暴风蓝",
+    "en": "Storm Blue",
+    "category": "深色",
+    "colors": [
+      "#151C2B",
+      "#2B3953",
+      "#4D6484",
+      "#8D9FB9",
+      "#D0D8E3"
+    ]
+  },
+  {
+    "id": "espresso",
+    "name": "浓缩咖啡",
+    "en": "Espresso",
+    "category": "深色",
+    "colors": [
+      "#201A17",
+      "#49362D",
+      "#765540",
+      "#A98C6F",
+      "#D7C6AE"
+    ]
+  },
+  {
+    "id": "paper",
+    "name": "纸与墨",
+    "en": "Paper Ink",
+    "category": "极简",
+    "colors": [
+      "#222523",
+      "#676C65",
+      "#B5B8AC",
+      "#E2E3DA",
+      "#F7F7F0"
+    ]
+  },
+  {
+    "id": "stone",
+    "name": "石间留白",
+    "en": "Quiet Stone",
+    "category": "极简",
+    "colors": [
+      "#474843",
+      "#888B80",
+      "#BBBEB1",
+      "#DEDFD6",
+      "#F4F3ED"
+    ]
+  },
+  {
+    "id": "linen",
+    "name": "亚麻与砂",
+    "en": "Linen Sand",
+    "category": "极简",
+    "colors": [
+      "#5D5348",
+      "#968773",
+      "#C4B6A1",
+      "#E5DCCC",
+      "#F8F4EC"
+    ]
+  },
+  {
+    "id": "porcelain",
+    "name": "青瓷素白",
+    "en": "Porcelain",
+    "category": "极简",
+    "colors": [
+      "#3C5554",
+      "#819B95",
+      "#BACAC2",
+      "#E2E9E1",
+      "#F7F9F3"
+    ]
+  },
+  {
+    "id": "mono",
+    "name": "冷调灰阶",
+    "en": "Cool Monochrome",
+    "category": "极简",
+    "colors": [
+      "#282C35",
+      "#626976",
+      "#9EA5AF",
+      "#D4D8DF",
+      "#F3F4F7"
+    ]
+  },
+  {
+    "id": "oat",
+    "name": "燕麦拿铁",
+    "en": "Oat Latte",
+    "category": "极简",
+    "colors": [
+      "#665C51",
+      "#A59988",
+      "#CDC4B6",
+      "#E8E2D7",
+      "#F9F6EF"
+    ]
+  },
+  {
+    "id": "plumgray",
+    "name": "梅灰",
+    "en": "Plum Gray",
+    "category": "极简",
+    "colors": [
+      "#4D4652",
+      "#8D8191",
+      "#BDB2C0",
+      "#E1DAE3",
+      "#F6F2F7"
+    ]
+  },
+  {
+    "id": "sage",
+    "name": "鼠尾草纸",
+    "en": "Sage Paper",
+    "category": "极简",
+    "colors": [
+      "#43564B",
+      "#829783",
+      "#B6C3AC",
+      "#DFE6D4",
+      "#F4F6ED"
+    ]
+  }
+]

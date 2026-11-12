@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hue",
+  "compatibility_date": "2026-11-12",
+  "assets": {
+    "directory": "./dist"
+  },
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "hue.astrbot.app",
+      "custom_domain": true
+    }
+  ],
+  "account_id": "6ad5d542ffffb012354b009cbfe88a10"
+}

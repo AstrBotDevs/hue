@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f2fa" />
+    <meta name="description" content="HUE — 全屏色彩工作台。探索颜色、自由缩放、收藏灵感。" />
+    <title>Hue by AstrBot</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23795EA8'/%3E%3Ccircle cx='15' cy='16' r='8' fill='%23EADDFF'/%3E%3Ccircle cx='25' cy='24' r='8' fill='%23D0BCFF'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="picker" aria-label="颜色选择器">
+        <canvas id="color-plane" tabindex="0" role="application" aria-label="饱和度与明度取色区。方向键调整颜色，Shift 加速；滚轮缩放，空格加拖动平移。"></canvas>
+        <div id="selection" class="selection" aria-hidden="true"><span id="selection-label">#8B7AE8</span></div>
+        <div id="hover-color" class="hover-color" aria-hidden="true"><i></i><span></span></div>
+        <button id="mobile-sidebar" class="mobile-sidebar" aria-label="打开颜色面板" data-icon="panel"></button>
+        <div class="hub" aria-label="色相与缩放控制">
+          <div class="hue-row hue-hub">
+            <label for="hue">色相</label>
+            <input id="hue" class="hue-slider" type="range" min="0" max="360" step="0.1" value="249.3" aria-label="色相" />
+            <output id="hue-value" for="hue">249°</output>
+          </div>
+          <div class="zoom-hub">
+            <div class="zoom-controls">
+              <md-icon-button id="zoom-out" aria-label="缩小" title="缩小（−）"><span data-icon="minus"></span></md-icon-button>
+              <button id="zoom-reset" title="重置视图（0）" aria-label="重置缩放">100<span>%</span></button>
+              <md-icon-button id="zoom-in" aria-label="放大" title="放大（+）"><span data-icon="plus"></span></md-icon-button>
+              <span class="control-divider"></span>
+              <md-icon-button id="fullscreen" aria-label="进入全屏" title="全屏"><span data-icon="expand"></span></md-icon-button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar" aria-label="当前颜色与配色灵感">
+        <header class="brand-row">
+          <div class="brand"><span class="brand-mark"><i></i><i></i></span><span>hue</span></div>
+          <md-icon-button id="theme-toggle" aria-label="切换深色模式" title="切换深色模式"><span data-icon="moon"></span></md-icon-button>
+          <md-icon-button id="close-sidebar" aria-label="关闭颜色面板"><span data-icon="close"></span></md-icon-button>
+        </header>
+        <div class="sidebar-content">
+          <section class="current-section" aria-label="当前颜色">
+            <div id="color-card" class="color-card">
+              <div class="swatch-top"><button id="color-family" class="color-name" title="在颜色大全中探索">匹配颜色名称</button><button id="save-color" aria-label="收藏当前颜色" title="收藏当前颜色" data-icon="bookmark"></button></div>
+              <div class="swatch-bottom"><strong id="hero-hex">#8B7AE8</strong><span id="swatch-flower" aria-hidden="true">✳</span></div>
+            </div>
+            <div class="hex-field">
+              <label for="hex-input">HEX</label>
+              <input id="hex-input" value="#8B7AE8" maxlength="7" spellcheck="false" autocomplete="off" aria-label="输入 HEX 色值" />
+              <md-icon-button id="copy-hex" aria-label="复制 HEX 色值" title="复制 HEX"><span data-icon="copy"></span></md-icon-button>
+            </div>
+            <div class="color-values">
+              <div class="value-field"><label for="rgb-value">RGB</label><input id="rgb-value" value="139,122,232" aria-label="输入 RGB 色值" title="R,G,B，各项为 0–255 的整数" spellcheck="false" autocomplete="off" maxlength="48" /><button id="copy-rgb" title="复制 RGB" aria-label="复制 RGB 色值" data-icon="copy"></button></div>
+              <div class="value-field"><label for="hsl-value">HSL</label><input id="hsl-value" value="249°,71%,69%" aria-label="输入 HSL 色值" title="H,S%,L%，色相 0–360，饱和度与亮度 0–100" spellcheck="false" autocomplete="off" maxlength="48" /><button id="copy-hsl" title="复制 HSL" aria-label="复制 HSL 色值" data-icon="copy"></button></div>
+            </div>
+            <md-filled-tonal-button id="eyedropper"><span slot="icon" data-icon="pipette"></span>从屏幕取色</md-filled-tonal-button>
+            <button id="open-library" class="open-library"><span>颜色大全 <span id="library-total"></span></span><span data-icon="arrow"></span></button>
+          </section>
+
+          <section class="inspiration-section" aria-labelledby="inspiration-heading">
+            <div class="section-title"><h2 id="inspiration-heading">配色灵感</h2><md-icon-button id="shuffle-palettes" aria-label="换一组配色" title="换一组"><span data-icon="shuffle"></span></md-icon-button></div>
+            <div class="palette-tabs" role="group" aria-label="配色分类"><button id="curated-tab" class="active" aria-pressed="true">精选配色</button><button id="saved-tab" aria-pressed="false">我的收藏 <span id="saved-count">0</span></button></div>
+            <div id="palette-filter-row" class="palette-filter-row" role="group" aria-label="配色风格"><button data-style="all" class="active" aria-pressed="true">全部</button><button data-style="自然" aria-pressed="false">自然</button><button data-style="柔和" aria-pressed="false">柔和</button><button data-style="鲜明" aria-pressed="false">鲜明</button><button data-style="复古" aria-pressed="false">复古</button><button data-style="深色" aria-pressed="false">深色</button><button data-style="极简" aria-pressed="false">极简</button></div>
+            <div id="palettes" class="palettes"></div>
+            <div id="palette-pagination" class="palette-pagination"><span id="palette-page" aria-live="polite"></span><div><md-icon-button id="palette-prev" aria-label="上一页配色"><span data-icon="chevron-left"></span></md-icon-button><md-icon-button id="palette-next" aria-label="下一页配色"><span data-icon="chevron-right"></span></md-icon-button></div></div>
+          </section>
+
+          <section class="recent-section" aria-labelledby="recent-heading"><div class="section-label"><h2 id="recent-heading">最近探索</h2><button id="clear-recent">清空</button></div><div id="recent-colors" class="recent-colors"></div></section>
+        </div>
+      </aside>
+    </main>
+    <md-dialog id="color-library" aria-label="颜色大全">
+      <div slot="headline" class="library-heading"><span>颜色大全</span><md-icon-button id="close-library" aria-label="关闭颜色大全"><span data-icon="close"></span></md-icon-button></div>
+      <div slot="content" class="library-content">
+        <label class="library-search"><span data-icon="search"></span><input id="color-search" type="search" placeholder="搜索名称、拼音或 HEX" aria-label="搜索颜色" autocomplete="off" autofocus /></label>
+        <div class="library-filters" role="group" aria-label="颜色来源"><button class="active" data-group="all" aria-pressed="true">全部</button><button data-group="chinese" aria-pressed="false">中国传统色</button><button data-group="css" aria-pressed="false">CSS 标准色</button><span id="library-results-count" aria-live="polite"></span></div>
+        <div id="library-grid" class="library-grid"></div>
+        <md-text-button id="library-more">显示更多</md-text-button>
+      </div>
+      <div slot="actions" class="library-sources"><a href="https://zhongguose.com/" target="_blank" rel="noopener">中国色</a><span>·</span><a href="https://github.com/zerosoul/chinese-colors" target="_blank" rel="noopener">Chinese Colors</a><span>·</span><a href="https://www.w3.org/TR/css-color-4/#named-colors" target="_blank" rel="noopener">CSS Color 4</a></div>
+    </md-dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

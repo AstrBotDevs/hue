@@ -1,0 +1,14 @@
+Named color reference data
+
+Chinese colors (526 name/HEX/pinyin records):
+https://zhongguose.com/colors.json
+
+Additional traditional color names (133 records after name deduplication):
+https://github.com/zerosoul/chinese-colors/blob/master/src/assets/colors.json
+Copyright (c) 2019 Tristan Yang. MIT license in chinese-colors-LICENSE.txt.
+
+CSS named colors (all 148 keywords, including aliases):
+https://www.w3.org/TR/css-color-4/#named-colors
+
+Traditional color values are screen references from these collections, not a universal pigment or print standard.
+Closest names use Euclidean distance in CIE Lab; the name tooltip identifies approximate matches and shows the reference value.

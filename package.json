@@ -1,0 +1,21 @@
+{
+  "name": "hue-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build --base=./",
+    "preview": "vite preview --host 127.0.0.1",
+    "deploy": "pnpm build && wrangler deploy"
+  },
+  "dependencies": {
+    "@material/material-color-utilities": "0.3.0",
+    "@material/web": "2.4.1"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0",
+    "wrangler": "^4.160.1"
+  },
+  "packageManager": "pnpm@10.12.4"
+}

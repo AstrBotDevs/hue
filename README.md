@@ -1,0 +1,57 @@
+# Hue by AstrBot
+
+A full-window color picker with a Material You interface, an HSV canvas, and floating hue and zoom controls.
+
+- GPU rendering on demand, with a Canvas 2D fallback.
+- Editable HEX, RGB, and HSL values, plus clipboard copying.
+- Dynamic themes, light/dark appearance, and screen picking in supported browsers.
+- 807 named colors searchable by name, pinyin, or HEX.
+- 48 five-color palettes across six styles, with favorites and recent colors stored locally.
+- Locally bundled Outfit, Noto Serif SC Light, and Cormorant Garamond Light fonts.
+
+## Development
+
+Requires Node.js 22.12+ and pnpm 10.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+The development server runs at `http://127.0.0.1:5173`.
+
+## Controls
+
+- Click or drag to select saturation and brightness.
+- Drag the rainbow slider to change hue.
+- Mouse wheel or trackpad pinch to zoom; smooth trackpad scrolling pans.
+- Hold the middle mouse button, or Space with a drag, to pan.
+- Use the floating controls to zoom, reset, or enter fullscreen.
+- With the canvas focused, arrow keys adjust the color; Shift increases the step.
+- Press Enter or leave a color field to apply an edit; Escape cancels it.
+
+Browsers do not expose a reliable wheel-device type. Smooth scrolling and discrete wheel steps are distinguished heuristically; the zoom buttons remain available on every device.
+
+## Build and deploy
+
+```sh
+pnpm build
+pnpm preview
+```
+
+The `dist/` directory is a standalone static website. Cloudflare Workers serves these assets directly, without a backend or database.
+
+Authenticate with the Cloudflare account that manages `astrbot.app`, then deploy:
+
+```sh
+pnpm exec wrangler login
+pnpm deploy
+```
+
+The custom domain is configured in `wrangler.jsonc`: `hue.astrbot.app`.
+
+## Color references and fonts
+
+Named-color data comes from [中国色](https://zhongguose.com/), [Chinese Colors](https://github.com/zerosoul/chinese-colors), and [CSS Color 4](https://www.w3.org/TR/css-color-4/#named-colors). Traditional colors are screen references; nearest names use CIE Lab distance. Hover over a name to see its reference value and whether the match is approximate.
+
+Data attribution and third-party licenses are included in `public/`. Font licenses are in `public/fonts/`.
