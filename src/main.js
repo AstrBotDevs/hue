@@ -2,6 +2,8 @@ import '@material/web/iconbutton/icon-button.js';
 import '@material/web/button/filled-tonal-button.js';
 import '@material/web/button/text-button.js';
 import '@material/web/dialog/dialog.js';
+import '@material/web/menu/menu.js';
+import '@material/web/menu/menu-item.js';
 import { themeFromSourceColor, argbFromHex, applyTheme, labFromArgb } from '@material/material-color-utilities';
 import namedColors from './named-colors.json';
 import paletteLibrary from './palettes.json';
@@ -14,6 +16,7 @@ import './style.css';
 
 const $ = (id) => document.getElementById(id);
 const paths = {
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
   image: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
   share: '<path d="M12 16V3m-4 4 4-4 4 4M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>',
   sparkles: '<path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 2v4m-2-2h4"/>',
@@ -597,7 +600,7 @@ function syncSidebar() {
 $('mobile-sidebar').addEventListener('click', () => { sidebar.classList.add('open'); syncSidebar(); $('close-sidebar').focus(); });
 $('close-sidebar').addEventListener('click', () => { sidebar.classList.remove('open'); syncSidebar(); $('mobile-sidebar').focus(); });
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && !$('color-library').open && !$('export-dialog').open && mobile.matches && sidebar.classList.contains('open')) $('close-sidebar').click();
+  if (event.key === 'Escape' && !$('color-library').open && !$('export-dialog').open && !$('tools-menu').open && mobile.matches && sidebar.classList.contains('open')) $('close-sidebar').click();
 });
 mobile.addEventListener('change', syncSidebar);
 new ResizeObserver(() => schedule({ plane: true })).observe(canvas);

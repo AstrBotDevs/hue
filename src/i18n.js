@@ -1,4 +1,5 @@
 const english = {
+  "收起工具": "Close tool",
   "颜色选择器": "Color picker",
   "饱和度与明度取色区。方向键调整颜色，Shift 加速；滚轮缩放，空格加拖动平移。": "Saturation and brightness. Arrow keys adjust color; Shift for larger steps. Mouse wheel or pinch to zoom; trackpad scroll, middle-button drag, or Space-drag to pan.",
   "打开颜色面板": "Open color panel",

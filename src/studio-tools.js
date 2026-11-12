@@ -7,6 +7,7 @@ const $ = (id) => document.getElementById(id);
 export class StudioTools {
   constructor({ color, shared, select, save, toast, icon, reveal }) {
     Object.assign(this, { color, shared, select, save, toast, icon, reveal });
+    this.activeTool = null;
     this.mode = 'complementary';
     this.locks = [false, false, false, false, false];
     this.variation = 0;
@@ -78,7 +79,15 @@ export class StudioTools {
         this.openExport(colors, kind === 'scale' ? this.scale.map((entry) => entry.label) : null);
       });
     }
-    for (const id of ['harmony-tool', 'scale-tool']) $(id).addEventListener('toggle', () => this.render());
+    $('tools-toggle').addEventListener('click', () => { $('tools-menu').open = !$('tools-menu').open; });
+    $('tools-menu').addEventListener('opening', () => $('tools-toggle').setAttribute('aria-expanded', 'true'));
+    $('tools-menu').addEventListener('closed', () => $('tools-toggle').setAttribute('aria-expanded', 'false'));
+    document.querySelectorAll('[data-tool]').forEach((item) => item.addEventListener('click', () => {
+      this.activeTool = item.dataset.tool; this.render();
+    }));
+    document.querySelectorAll('[data-close-tool]').forEach((button) => button.addEventListener('click', () => {
+      this.activeTool = null; this.render(); $('tools-toggle').focus();
+    }));
     $('close-export').addEventListener('click', () => $('export-dialog').close());
     document.querySelectorAll('[data-format]').forEach((button) => button.addEventListener('click', () => {
       this.exportFormat = button.dataset.format; this.renderExport();
@@ -151,6 +160,8 @@ export class StudioTools {
   }
 
   render() {
+    document.querySelector('.studio-tools').hidden = !this.activeTool && !this.shared.length;
+    for (const kind of ['image', 'harmony', 'scale']) $(`${kind}-tool`).hidden = this.activeTool !== kind;
     this.renderSwatches('harmony-swatches', this.generated, true);
     this.renderSwatches('image-swatches', this.imageColors);
     this.renderSwatches('shared-swatches', this.shared);
@@ -179,7 +190,7 @@ export class StudioTools {
     const request = ++this.request;
     this.busy = true; this.decoding = true; this.imageStatus = '正在提取配色…';
     this.imageColors = []; this.imagePixels = null;
-    $('image-tool').open = true; this.reveal(); this.render();
+    this.activeTool = 'image'; this.render(); this.reveal();
     const url = URL.createObjectURL(file);
     try {
       const image = new Image(); image.src = url; await image.decode();

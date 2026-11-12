@@ -266,15 +266,9 @@
   html[lang="en"] .palette-filter-row button { font-size: 10px; }
 
 @layer components {
-  .studio-tools + .inspiration-section { margin-top: 0; border-top: 0; }
+  .studio-tools:not([hidden]) + .inspiration-section { margin-top: 0; border-top: 0; }
   .studio-tools { margin-top: 18px; border-top: 1px solid var(--border); }
   .tool-panel { border-bottom: 1px solid var(--border); }
-  .tool-panel summary { display: flex; align-items: center; gap: 10px; padding: 17px 0; cursor: pointer; font-size: 12px; font-weight: 550; list-style: none; }
-  .tool-panel summary::-webkit-details-marker { display: none; }
-  .tool-panel summary > span:first-child { color: var(--md-sys-color-primary); }
-  .tool-panel summary svg { width: 18px; height: 18px; }
-  .tool-chevron { margin-left: auto; transition: transform .2s; }
-  .tool-panel[open] .tool-chevron { transform: rotate(90deg); }
   .tool-body { padding-bottom: 18px; }
   .tool-note { color: var(--muted); font-size: 10px; line-height: 1.65; margin: 10px 0; }
   .tool-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
@@ -327,4 +321,18 @@
 @layer components {
   .swatch-actions { display: flex; flex-shrink: 0; align-items: center; gap: 6px; }
   .swatch-actions button { display: grid; place-items: center; }
+}
+
+@layer components {
+  .picker-actions { display: flex; align-items: center; gap: 8px; position: relative; }
+  .picker-actions #eyedropper { flex: 1; min-width: 0; width: auto; }
+  #tools-toggle { flex-shrink: 0; margin-left: auto; border-radius: 50%; background: var(--md-sys-color-secondary-container); --md-icon-button-icon-color: var(--md-sys-color-on-secondary-container); --md-icon-button-state-layer-width: 38px; --md-icon-button-state-layer-height: 38px; }
+  #tools-menu { min-width: 200px; --md-menu-container-color: var(--panel); --md-menu-container-shape: 16px; --md-menu-item-label-text-font: inherit; --md-menu-item-label-text-size: 13px; }
+  #tools-menu svg { width: 20px; height: 20px; color: var(--md-sys-color-primary); }
+  .active-tool-heading { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; }
+  .active-tool-heading h2 { font-size: 12px; font-weight: 550; }
+  .active-tool-heading button { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: var(--muted); background: transparent; }
+  .active-tool-heading button:hover { background: var(--card); }
+  .active-tool-heading svg { width: 16px; height: 16px; }
+  .studio-tools[hidden], .tool-panel[hidden] { display: none; }
 }

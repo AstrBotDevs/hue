@@ -55,7 +55,15 @@
               <div class="value-field"><label for="rgb-value">RGB</label><input id="rgb-value" value="139,122,232" aria-label="输入 RGB 色值" data-i18n-aria-label="输入 RGB 色值" title="R,G,B，各项为 0–255 的整数" data-i18n-title="R,G,B，各项为 0–255 的整数" spellcheck="false" autocomplete="off" maxlength="48" /><button id="copy-rgb" title="复制 RGB" data-i18n-title="复制 RGB" aria-label="复制 RGB 色值" data-i18n-aria-label="复制 RGB 色值" data-icon="copy"></button></div>
               <div class="value-field"><label for="hsl-value">HSL</label><input id="hsl-value" value="249°,71%,69%" aria-label="输入 HSL 色值" data-i18n-aria-label="输入 HSL 色值" title="H,S%,L%，色相 0–360，饱和度与亮度 0–100" data-i18n-title="H,S%,L%，色相 0–360，饱和度与亮度 0–100" spellcheck="false" autocomplete="off" maxlength="48" /><button id="copy-hsl" title="复制 HSL" data-i18n-title="复制 HSL" aria-label="复制 HSL 色值" data-i18n-aria-label="复制 HSL 色值" data-icon="copy"></button></div>
             </div>
-            <md-filled-tonal-button id="eyedropper"><span slot="icon" data-icon="pipette"></span><span data-i18n="从屏幕取色">从屏幕取色</span></md-filled-tonal-button>
+            <div class="picker-actions">
+              <md-filled-tonal-button id="eyedropper"><span slot="icon" data-icon="pipette"></span><span data-i18n="从屏幕取色">从屏幕取色</span></md-filled-tonal-button>
+              <md-icon-button id="tools-toggle" aria-haspopup="menu" aria-controls="tools-menu" aria-expanded="false" aria-label="色彩工具" data-i18n-aria-label="色彩工具" title="色彩工具" data-i18n-title="色彩工具"><span data-icon="menu"></span></md-icon-button>
+              <md-menu id="tools-menu" anchor="tools-toggle" positioning="popover" anchor-corner="end-end" menu-corner="start-end" aria-label="色彩工具" data-i18n-aria-label="色彩工具">
+                <md-menu-item data-tool="image"><span slot="start" data-icon="image"></span><span slot="headline" data-i18n="从图片提取">从图片提取</span></md-menu-item>
+                <md-menu-item data-tool="harmony"><span slot="start" data-icon="sparkles"></span><span slot="headline" data-i18n="生成配色">生成配色</span></md-menu-item>
+                <md-menu-item data-tool="scale"><span slot="start" data-icon="scale"></span><span slot="headline" data-i18n="明暗色阶">明暗色阶</span></md-menu-item>
+              </md-menu>
+            </div>
           </section>
 
           <section class="studio-tools" aria-label="色彩工具" data-i18n-aria-label="色彩工具">
@@ -64,8 +72,8 @@
               <div id="shared-swatches" class="tool-swatches"></div>
               <div class="tool-actions"><button id="save-shared" data-i18n="收藏配色">收藏配色</button><button id="export-shared" data-i18n="分享与导出">分享与导出</button></div>
             </div>
-            <details id="image-tool" class="tool-panel">
-              <summary><span data-icon="image"></span><span data-i18n="从图片提取">从图片提取</span><span class="tool-chevron" data-icon="chevron-right"></span></summary>
+            <section id="image-tool" class="tool-panel" aria-labelledby="image-heading" hidden>
+              <div class="active-tool-heading"><h2 id="image-heading" data-i18n="从图片提取">从图片提取</h2><button data-close-tool aria-label="收起工具" data-i18n-aria-label="收起工具" title="收起工具" data-i18n-title="收起工具" data-icon="close"></button></div>
               <div class="tool-body">
                 <button id="choose-image" class="image-drop"><span data-icon="image"></span><strong data-i18n="拖入图片，或点击选择">拖入图片，或点击选择</strong><span data-i18n="也可粘贴截图 · 图片仅在本地处理">也可粘贴截图 · 图片仅在本地处理</span></button>
                 <input id="image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden />
@@ -76,24 +84,24 @@
                 <div id="image-swatches" class="tool-swatches"></div>
                 <div class="tool-actions"><button id="save-image" disabled data-i18n="收藏配色">收藏配色</button><button id="export-image" disabled data-i18n="分享与导出">分享与导出</button></div>
               </div>
-            </details>
-            <details id="harmony-tool" class="tool-panel">
-              <summary><span data-icon="sparkles"></span><span data-i18n="生成配色">生成配色</span><span class="tool-chevron" data-icon="chevron-right"></span></summary>
+            </section>
+            <section id="harmony-tool" class="tool-panel" aria-labelledby="harmony-heading" hidden>
+              <div class="active-tool-heading"><h2 id="harmony-heading" data-i18n="生成配色">生成配色</h2><button data-close-tool aria-label="收起工具" data-i18n-aria-label="收起工具" title="收起工具" data-i18n-title="收起工具" data-icon="close"></button></div>
               <div class="tool-body">
                 <div class="tool-chips harmony-modes" role="group" aria-label="配色关系" data-i18n-aria-label="配色关系"><button data-harmony="complementary" aria-pressed="true" data-i18n="互补色">互补色</button><button data-harmony="analogous" aria-pressed="false" data-i18n="邻近色">邻近色</button><button data-harmony="triadic" aria-pressed="false" data-i18n="三角色">三角色</button><button data-harmony="monochrome" aria-pressed="false" data-i18n="同色系">同色系</button></div>
                 <p class="tool-note" data-i18n="围绕当前颜色生成，锁定喜欢的颜色再换一组。">围绕当前颜色生成，锁定喜欢的颜色再换一组。</p>
                 <div id="harmony-swatches" class="tool-swatches"></div>
                 <div class="tool-actions"><button id="regenerate" data-i18n="重新生成">重新生成</button><button id="save-harmony" data-i18n="收藏配色">收藏配色</button><button id="export-harmony" data-i18n="分享与导出">分享与导出</button></div>
               </div>
-            </details>
-            <details id="scale-tool" class="tool-panel">
-              <summary><span data-icon="scale"></span><span data-i18n="明暗色阶">明暗色阶</span><span class="tool-chevron" data-icon="chevron-right"></span></summary>
+            </section>
+            <section id="scale-tool" class="tool-panel" aria-labelledby="scale-heading" hidden>
+              <div class="active-tool-heading"><h2 id="scale-heading" data-i18n="明暗色阶">明暗色阶</h2><button data-close-tool aria-label="收起工具" data-i18n-aria-label="收起工具" title="收起工具" data-i18n-title="收起工具" data-icon="close"></button></div>
               <div class="tool-body">
                 <p class="tool-note" data-i18n="从浅到深的 11 级色阶，点击任意色阶取色。">从浅到深的 11 级色阶，点击任意色阶取色。</p>
                 <div id="scale-swatches" class="scale-swatches"></div>
                 <div class="tool-actions"><button id="save-scale" data-i18n="收藏配色">收藏配色</button><button id="export-scale" data-i18n="分享与导出">分享与导出</button></div>
               </div>
-            </details>
+            </section>
           </section>
 
           <section class="inspiration-section" aria-labelledby="inspiration-heading">
