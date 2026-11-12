@@ -45,7 +45,7 @@ Authenticate with the Cloudflare account that manages `astrbot.app`, then deploy
 
 ```sh
 pnpm exec wrangler login
-pnpm deploy
+pnpm run deploy
 ```
 
 The custom domain is configured in `wrangler.jsonc`: `hue.astrbot.app`.
