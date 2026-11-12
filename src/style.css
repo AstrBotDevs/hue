@@ -263,5 +263,4 @@
 }
 
   #language-toggle { flex-shrink: 0; margin-right: 2px; }
-  .language-label { font: 600 12px/1 system-ui, sans-serif; letter-spacing: .2px; }
   html[lang="en"] .palette-filter-row button { font-size: 10px; }

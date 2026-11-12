@@ -111,8 +111,6 @@ export function setLocale(nextLocale) {
     });
   }
   const toggle = document.getElementById('language-toggle');
-  toggle.querySelector('.language-label').textContent = locale === 'en' ? '中' : 'EN';
-  toggle.querySelector('.language-label').lang = locale === 'en' ? 'zh-CN' : 'en';
   toggle.title = locale === 'en' ? '切换到中文' : 'Switch to English';
   toggle.setAttribute('aria-label', toggle.title);
 }
