@@ -5,7 +5,7 @@ A full-window color picker with a Material You interface, an HSV canvas, and flo
 - GPU rendering on demand, with a Canvas 2D fallback.
 - Editable HEX, RGB, and HSL values, plus clipboard copying.
 - Dynamic themes, light/dark appearance, and screen picking in supported browsers.
-- English and Chinese interfaces with a saved language preference; first visit follows the browser language. Traditional Chinese color names retain their original names.
+- English and Chinese interfaces with a saved language preference; first visit follows the browser language. Color and palette names follow the selected language; color search accepts both languages, pinyin, and CSS keywords.
 - 807 named colors searchable by name, pinyin, or HEX.
 - 48 five-color palettes across six styles, with favorites and recent colors stored locally.
 - Locally bundled Outfit, Noto Serif SC Light, and Cormorant Garamond Light fonts.
@@ -53,6 +53,6 @@ The custom domain is configured in `wrangler.jsonc`: `hue.astrbot.app`.
 
 ## Color references and fonts
 
-Named-color data comes from [中国色](https://zhongguose.com/), [Chinese Colors](https://github.com/zerosoul/chinese-colors), and [CSS Color 4](https://www.w3.org/TR/css-color-4/#named-colors). Traditional colors are screen references; nearest names use CIE Lab distance. Hover over a name to see its reference value and whether the match is approximate.
+Named-color data comes from [中国色](https://zhongguose.com/), [Chinese Colors](https://github.com/zerosoul/chinese-colors), and [CSS Color 4](https://www.w3.org/TR/css-color-4/#named-colors). English names for traditional colors are descriptive translations, not standardized pigment names. Traditional colors are screen references; nearest names use CIE Lab distance. Hover over a name to see its reference value and whether the match is approximate.
 
 Data attribution and third-party licenses are included in `public/`. Font licenses are in `public/fonts/`.

@@ -12,3 +12,5 @@ https://www.w3.org/TR/css-color-4/#named-colors
 
 Traditional color values are screen references from these collections, not a universal pigment or print standard.
 Closest names use Euclidean distance in CIE Lab; the name tooltip identifies approximate matches and shows the reference value.
+
+English display names for traditional colors and Chinese display names for CSS colors are descriptive translations added by this project. Original names, CSS keywords, and HEX values are preserved.

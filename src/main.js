@@ -116,9 +116,10 @@ function render() {
     }
     if (preferredNamedColor?.hex === colorHex) nearest = preferredNamedColor;
     const exactName = nearest.hex === colorHex;
-    $('color-family').textContent = nearest.name;
-    $('color-family').lang = nearest.group === 'css' ? 'en' : 'zh-CN';
-    $('color-family').title = `${exactName ? '' : t('最接近的命名色：')}${nearest.name} ${nearest.hex} · ${t('点击打开颜色大全')}`;
+    const name = locale === 'en' ? nearest.en : (nearest.zh || nearest.name);
+    $('color-family').textContent = name;
+    $('color-family').lang = locale;
+    $('color-family').title = `${exactName ? '' : t('最接近的命名色：')}${name} ${nearest.hex} · ${t('点击打开颜色大全')}`;
     $('save-color').classList.toggle('saved', state.savedColors.includes(colorHex));
     $('save-color').setAttribute('aria-pressed', String(state.savedColors.includes(colorHex)));
     $('save-color').setAttribute('aria-label', t(state.savedColors.includes(colorHex) ? '取消收藏当前颜色' : '收藏当前颜色'));
@@ -241,7 +242,7 @@ function renderPalettes() {
     card.className = 'palette';
     const saved = state.savedPalettes.includes(palette.id);
     const name = locale === 'en' ? palette.en : palette.name;
-    card.innerHTML = `<div class="palette-colors">${palette.colors.map((hex) => `<button style="background:${hex};color:${readableInk(hexToRgb(hex))}" title="${hex}" aria-label="${t('选择 {name} 中的 {hex}', { name, hex })}" data-color="${hex}"></button>`).join('')}</div><div class="palette-meta"><div class="palette-name">${name}<span lang="${locale === 'en' ? 'zh-CN' : 'en'}">${locale === 'en' ? palette.name : palette.en}</span></div><button class="save-palette ${saved ? 'saved' : ''}" aria-label="${t(saved ? '取消收藏 {name}' : '收藏 {name}', { name })}" aria-pressed="${saved}" title="${t(saved ? '取消收藏' : '收藏配色')}">${icon('heart')}</button></div>`;
+    card.innerHTML = `<div class="palette-colors">${palette.colors.map((hex) => `<button style="background:${hex};color:${readableInk(hexToRgb(hex))}" title="${hex}" aria-label="${t('选择 {name} 中的 {hex}', { name, hex })}" data-color="${hex}"></button>`).join('')}</div><div class="palette-meta"><div class="palette-name">${name}<span>${t(palette.category)}</span></div><button class="save-palette ${saved ? 'saved' : ''}" aria-label="${t(saved ? '取消收藏 {name}' : '收藏 {name}', { name })}" aria-pressed="${saved}" title="${t(saved ? '取消收藏' : '收藏配色')}">${icon('heart')}</button></div>`;
     card.querySelectorAll('[data-color]').forEach((button) => button.addEventListener('click', () => selectHex(button.dataset.color)));
     card.querySelector('.save-palette').addEventListener('click', () => {
       state.savedPalettes = saved ? state.savedPalettes.filter((id) => id !== palette.id) : [...state.savedPalettes, palette.id];
@@ -533,16 +534,17 @@ $('clear-recent').addEventListener('click', () => { state.recent = []; renderRec
 
 function renderLibrary() {
   const query = $('color-search').value.trim().toLowerCase();
-  const matches = namedColors.filter((color) => (libraryGroup === 'all' || color.group === libraryGroup) && `${color.name} ${color.alias} ${color.hex}`.toLowerCase().includes(query));
+  const matches = namedColors.filter((color) => (libraryGroup === 'all' || color.group === libraryGroup) && `${color.name} ${color.en} ${color.zh || ''} ${color.alias} ${color.hex}`.toLowerCase().includes(query));
   $('library-results-count').textContent = t('{count} 色', { count: matches.length });
   const fragment = document.createDocumentFragment();
   for (const color of matches.slice(0, libraryLimit)) {
     const button = document.createElement('button');
     button.className = 'library-color';
-    button.setAttribute('aria-label', t('选择 {name} {hex}', { name: color.name, hex: color.hex }));
+    const name = locale === 'en' ? color.en : (color.zh || color.name);
+    button.setAttribute('aria-label', t('选择 {name} {hex}', { name, hex: color.hex }));
     button.innerHTML = '<span class="library-swatch"></span><span class="library-color-name"></span><code></code>';
     button.querySelector('.library-swatch').style.background = color.hex;
-    button.querySelector('.library-color-name').textContent = color.name;
+    button.querySelector('.library-color-name').textContent = name;
     button.querySelector('code').textContent = color.hex;
     button.addEventListener('click', () => {
       preferredNamedColor = color;

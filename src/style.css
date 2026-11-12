@@ -106,7 +106,7 @@
   .swatch-top { display: flex; align-items: center; justify-content: space-between; }
   .swatch-top > span { font-size: 11px; letter-spacing: 1.5px; }
   .swatch-top button { width: 30px; height: 30px; border-radius: 50%; background: #ffffff25; }
-  .swatch-top .color-name { width: auto; max-width: 85%; height: auto; padding: 3px 0; border-radius: 6px; background: transparent; text-align: left; font-family: 'Hue Cormorant Garamond', 'Hue Noto Serif SC', 'Songti SC', 'Noto Serif CJK SC', serif; font-size: 18px; font-weight: 300; line-height: 1.4; letter-spacing: 1px; }
+  .swatch-top .color-name { width: auto; max-width: 85%; height: auto; padding: 3px 0; border-radius: 6px; background: transparent; text-align: left; font-family: 'Hue Cormorant Garamond', 'Hue Noto Serif SC', 'Songti SC', 'Noto Serif CJK SC', serif; font-size: 18px; font-weight: 300; line-height: 1.4; letter-spacing: 1px; overflow-wrap: anywhere; }
   .swatch-top .color-name:lang(en) { font-size: 21px; letter-spacing: .3px; }
   .swatch-top button:hover { background: #ffffff55; }
   .swatch-top button.saved svg { fill: currentColor; }
