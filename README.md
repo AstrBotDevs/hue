@@ -8,6 +8,10 @@ A full-window color picker with a Material You interface, an HSV canvas, and flo
 - English and Chinese interfaces with a saved language preference; first visit follows the browser language. Color and palette names follow the selected language; color search accepts both languages, pinyin, and CSS keywords.
 - 807 named colors searchable by name, pinyin, or HEX.
 - 48 five-color palettes across six styles, with favorites and recent colors stored locally.
+- Image palettes from file selection, drag-and-drop, or pasted screenshots, with 5–8 requested colors. Analysis runs in a Web Worker; images stay on the device. Simple or transparent images may yield fewer distinct colors.
+- Complementary, analogous, triadic, and monochrome palettes with individual color locks.
+- Material HCT tonal scales with 11 steps (50–950).
+- Shareable color/palette links and CSS variables, HEX lists, and PNG exports. Custom palettes are saved locally in Favorites.
 - Locally bundled Outfit, Noto Serif SC Light, and Cormorant Garamond Light fonts.
 
 ## Development
@@ -36,6 +40,7 @@ Browsers do not expose a reliable wheel-device type. Smooth scrolling and discre
 ## Build and deploy
 
 ```sh
+pnpm test
 pnpm build
 pnpm preview
 ```
@@ -50,6 +55,8 @@ pnpm run deploy
 ```
 
 The custom domain is configured in `wrangler.jsonc`: `hue.astrbot.app`.
+
+Image input supports PNG, JPEG, WebP, GIF, and AVIF up to 20 MB. Animated images use a single decoded frame. Shared links contain only color values, never the source image. Sharing does not require an account.
 
 ## Color references and fonts
 

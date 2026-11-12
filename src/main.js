@@ -7,11 +7,19 @@ import namedColors from './named-colors.json';
 import paletteLibrary from './palettes.json';
 import { clamp, hsvToRgb, rgbToHsv, rgbToHex, hexToRgb, rgbToHsl, readableInk } from './color.js';
 import { ColorPlane } from './plane.js';
+import { StudioTools } from './studio-tools.js';
+import { parseShareHash } from './palette-tools.js';
 import { t, locale, setLocale } from './i18n.js';
 import './style.css';
 
 const $ = (id) => document.getElementById(id);
 const paths = {
+  image: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
+  share: '<path d="M12 16V3m-4 4 4-4 4 4M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>',
+  sparkles: '<path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 2v4m-2-2h4"/>',
+  scale: '<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16m6-16v16"/>',
+  lock: '<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+  unlock: '<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 7.5-2"/>',
   globe: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
   minus: '<path d="M5 12h14"/>', plus: '<path d="M5 12h14M12 5v14"/>',
   expand: '<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/>',
@@ -38,7 +46,9 @@ document.querySelectorAll('[data-icon]').forEach((element) => { element.innerHTM
 let stored = {};
 try { stored = JSON.parse(localStorage.getItem('hue-studio') || '{}') || {}; } catch { /* Storage is optional. */ }
 const validHex = (value) => typeof value === 'string' && /^#[\da-f]{6}$/i.test(value);
-const initialHex = validHex(stored.color) ? stored.color : '#8B7AE8';
+const sharedLink = parseShareHash(location.hash);
+const initialHex = sharedLink?.color || (validHex(stored.color) ? stored.color : '#8B7AE8');
+const customKinds = { image: '图片配色', harmony: '生成配色', scale: '明暗色阶', shared: '共享配色' };
 const state = {
   ...rgbToHsv(...hexToRgb(initialHex)),
   zoom: 1, x: 0, y: 0,
@@ -47,6 +57,7 @@ const state = {
   recent: Array.isArray(stored.recent) ? stored.recent.filter(validHex).slice(0, 8) : [initialHex],
   savedColors: Array.isArray(stored.savedColors) ? stored.savedColors.filter(validHex).slice(0, 40) : [],
   savedPalettes: Array.isArray(stored.savedPalettes) ? stored.savedPalettes.filter((id) => paletteLibrary.some((p) => p.id === id)) : [],
+  customPalettes: Array.isArray(stored.customPalettes) ? stored.customPalettes.filter((p) => p && typeof p.id === 'string' && Object.hasOwn(customKinds, p.kind) && Array.isArray(p.colors) && p.colors.length > 0 && p.colors.length <= 12 && p.colors.every(validHex)).slice(0, 40) : [],
   tab: 'curated', paletteOffset: 0, paletteStyle: 'all',
 };
 const canvas = $('color-plane');
@@ -54,6 +65,7 @@ const picker = document.querySelector('.picker');
 const plane = new ColorPlane(canvas);
 let colorHex = initialHex, colorRgb = hexToRgb(initialHex), colorHsl = rgbToHsl(colorRgb);
 let frame = 0, colorDirty = true, planeDirty = true, hoverPoint = null, toastTimer;
+let studio;
 let themeTimer = 0, lastThemeAt = 0, lastThemeKey = '';
 const namedColorLabs = namedColors.map((color) => labFromArgb(argbFromHex(color.hex)));
 let preferredNamedColor = null, libraryGroup = 'all', libraryLimit = 72;
@@ -67,7 +79,7 @@ function toast(message) {
 
 function persist() {
   try {
-    localStorage.setItem('hue-studio', JSON.stringify({ color: colorHex, dark: state.dark, locale: state.locale, recent: state.recent, savedColors: state.savedColors, savedPalettes: state.savedPalettes }));
+    localStorage.setItem('hue-studio', JSON.stringify({ color: colorHex, dark: state.dark, locale: state.locale, recent: state.recent, savedColors: state.savedColors, savedPalettes: state.savedPalettes, customPalettes: state.customPalettes }));
   } catch { /* The picker also works when browser storage is unavailable. */ }
 }
 
@@ -93,6 +105,7 @@ function render() {
     colorRgb = hsvToRgb(state.h, state.s, state.v);
     colorHex = rgbToHex(colorRgb);
     colorHsl = rgbToHsl(colorRgb);
+    studio?.updateColor(colorHex);
     $('color-card').style.backgroundColor = colorHex;
     $('color-card').style.color = readableInk(colorRgb);
     $('hero-hex').textContent = colorHex;
@@ -202,7 +215,7 @@ function renderPalettes() {
   if (state.tab === 'curated') section.style.removeProperty('min-height');
   const holder = $('palettes');
   holder.replaceChildren();
-  $('saved-count').textContent = state.savedPalettes.length + state.savedColors.length;
+  $('saved-count').textContent = state.savedPalettes.length + state.savedColors.length + state.customPalettes.length;
   for (const tab of ['curated', 'saved']) {
     $(`${tab}-tab`).classList.toggle('active', state.tab === tab);
     $(`${tab}-tab`).setAttribute('aria-pressed', String(state.tab === tab));
@@ -210,7 +223,7 @@ function renderPalettes() {
   $('shuffle-palettes').disabled = state.tab === 'saved';
   const filtered = paletteLibrary.filter((palette) => state.paletteStyle === 'all' || palette.category === state.paletteStyle);
   const palettes = state.tab === 'saved'
-    ? paletteLibrary.filter((p) => state.savedPalettes.includes(p.id))
+    ? [...state.customPalettes.map((p) => ({ ...p, custom: true, name: t(customKinds[p.kind]), en: t(customKinds[p.kind]), category: '' })), ...paletteLibrary.filter((p) => state.savedPalettes.includes(p.id))]
     : filtered.slice(state.paletteOffset, state.paletteOffset + 3);
   $('palette-filter-row').hidden = state.tab === 'saved';
   document.querySelectorAll('[data-style]').forEach((button) => {
@@ -240,12 +253,14 @@ function renderPalettes() {
   for (const palette of palettes) {
     const card = document.createElement('article');
     card.className = 'palette';
-    const saved = state.savedPalettes.includes(palette.id);
+    const saved = palette.custom || state.savedPalettes.includes(palette.id);
     const name = locale === 'en' ? palette.en : palette.name;
-    card.innerHTML = `<div class="palette-colors">${palette.colors.map((hex) => `<button style="background:${hex};color:${readableInk(hexToRgb(hex))}" title="${hex}" aria-label="${t('选择 {name} 中的 {hex}', { name, hex })}" data-color="${hex}"></button>`).join('')}</div><div class="palette-meta"><div class="palette-name">${name}<span>${t(palette.category)}</span></div><button class="save-palette ${saved ? 'saved' : ''}" aria-label="${t(saved ? '取消收藏 {name}' : '收藏 {name}', { name })}" aria-pressed="${saved}" title="${t(saved ? '取消收藏' : '收藏配色')}">${icon('heart')}</button></div>`;
+    card.innerHTML = `<div class="palette-colors">${palette.colors.map((hex) => `<button style="background:${hex};color:${readableInk(hexToRgb(hex))}" title="${hex}" aria-label="${t('选择 {name} 中的 {hex}', { name, hex })}" data-color="${hex}"></button>`).join('')}</div><div class="palette-meta"><div class="palette-name">${name}<span>${t(palette.category)}</span></div><div class="palette-buttons"><button class="export-palette" aria-label="${t('分享 {name}', { name })}" title="${t('分享与导出')}">${icon('share')}</button><button class="save-palette ${saved ? 'saved' : ''}" aria-label="${t(saved ? '取消收藏 {name}' : '收藏 {name}', { name })}" aria-pressed="${saved}" title="${t(saved ? '取消收藏' : '收藏配色')}">${icon('heart')}</button></div></div>`;
     card.querySelectorAll('[data-color]').forEach((button) => button.addEventListener('click', () => selectHex(button.dataset.color)));
+    card.querySelector('.export-palette').addEventListener('click', () => studio.openExport(palette.colors));
     card.querySelector('.save-palette').addEventListener('click', () => {
-      state.savedPalettes = saved ? state.savedPalettes.filter((id) => id !== palette.id) : [...state.savedPalettes, palette.id];
+      if (palette.custom) state.customPalettes = state.customPalettes.filter((p) => p.id !== palette.id);
+      else state.savedPalettes = saved ? state.savedPalettes.filter((id) => id !== palette.id) : [...state.savedPalettes, palette.id];
       renderPalettes(); persist();
       toast(saved ? t('已取消收藏') : t('已收藏「{name}」', { name }));
     });
@@ -435,6 +450,7 @@ $('language-toggle').addEventListener('click', () => {
   renderPalettes();
   renderRecent();
   renderLibrary();
+  studio.render();
   $('toast').classList.remove('visible');
   scroller.scrollTop = scrollTop;
   persist();
@@ -562,7 +578,7 @@ function renderLibrary() {
   });
 }
 
-for (const id of ['open-library', 'color-family']) $(id).addEventListener('click', () => {
+$('color-family').addEventListener('click', () => {
   renderLibrary(); $('color-library').show();
 });
 $('close-library').addEventListener('click', () => $('color-library').close());
@@ -571,7 +587,6 @@ document.querySelectorAll('[data-group]').forEach((button) => button.addEventLis
   libraryGroup = button.dataset.group; libraryLimit = 72; renderLibrary();
 }));
 $('library-more').addEventListener('click', () => { libraryLimit += 72; renderLibrary(); });
-$('library-total').textContent = namedColors.length;
 
 const sidebar = document.querySelector('.sidebar');
 const mobile = matchMedia('(max-width: 760px)');
@@ -582,12 +597,29 @@ function syncSidebar() {
 $('mobile-sidebar').addEventListener('click', () => { sidebar.classList.add('open'); syncSidebar(); $('close-sidebar').focus(); });
 $('close-sidebar').addEventListener('click', () => { sidebar.classList.remove('open'); syncSidebar(); $('mobile-sidebar').focus(); });
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && mobile.matches && sidebar.classList.contains('open')) $('close-sidebar').click();
+  if (event.key === 'Escape' && !$('color-library').open && !$('export-dialog').open && mobile.matches && sidebar.classList.contains('open')) $('close-sidebar').click();
 });
 mobile.addEventListener('change', syncSidebar);
 new ResizeObserver(() => schedule({ plane: true })).observe(canvas);
 syncSidebar();
 setLocale(state.locale);
+studio = new StudioTools({
+  color: initialHex, shared: sharedLink?.colors || [], select: selectHex, toast, icon,
+  reveal: () => { sidebar.classList.add('open'); syncSidebar(); $('image-tool').scrollIntoView({ block: 'nearest' }); },
+  save: (colors, kind) => {
+    if (state.customPalettes.some((p) => p.colors.join(',') === colors.join(','))) { toast(t('这组配色已在收藏中')); return; }
+    if (state.customPalettes.length >= 40) { toast(t('最多收藏 40 组自建配色，请先移除一组')); return; }
+    state.customPalettes.unshift({ id: crypto.randomUUID(), kind, colors: [...colors] });
+    persist(); renderPalettes(); toast(t('配色已加入我的收藏'));
+  },
+});
+window.addEventListener('hashchange', () => {
+  const shared = parseShareHash(location.hash);
+  if (!shared) return;
+  selectHex(shared.color); studio.shared = shared.colors; studio.render();
+  if (shared.colors.length) { sidebar.classList.add('open'); syncSidebar(); $('shared-palette').scrollIntoView({ block: 'nearest' }); }
+});
+if (sharedLink?.colors.length) { sidebar.classList.add('open'); syncSidebar(); }
 render();
 updateTheme();
 renderPalettes();

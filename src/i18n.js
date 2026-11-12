@@ -89,7 +89,52 @@ const english = {
   "已收藏 {hex}": "Saved {hex}",
   "{count} 色": "{count} colors",
   "选择 {name} {hex}": "Select {name} {hex}",
-  "没有匹配的颜色，试试其他名称或色值。": "No matching colors. Try another name or color value."
+  "没有匹配的颜色，试试其他名称或色值。": "No matching colors. Try another name or color value.",
+  "色彩工具": "Color tools",
+  "共享配色": "Shared palette",
+  "图片配色": "Image palette",
+  "从图片提取": "Extract from image",
+  "拖入图片，或点击选择": "Drop an image, or choose a file",
+  "也可粘贴截图 · 图片仅在本地处理": "Or paste a screenshot · processed on your device",
+  "PNG、JPG、WebP、GIF、AVIF · 最大 20 MB": "PNG, JPG, WebP, GIF, AVIF · up to 20 MB",
+  "待提取配色的图片": "Image used for palette extraction",
+  "颜色数量": "Color count",
+  "生成配色": "Palette generator",
+  "配色关系": "Color harmony",
+  "互补色": "Complementary",
+  "邻近色": "Analogous",
+  "三角色": "Triadic",
+  "同色系": "Monochrome",
+  "围绕当前颜色生成，锁定喜欢的颜色再换一组。": "Based on your current color. Lock favorites before regenerating.",
+  "重新生成": "Regenerate",
+  "明暗色阶": "Tonal scale",
+  "从浅到深的 11 级色阶，点击任意色阶取色。": "11 tones from light to dark. Select any tone to use it.",
+  "分享与导出": "Share & export",
+  "关闭": "Close",
+  "导出格式": "Export format",
+  "分享链接": "Share link",
+  "导出内容": "Export content",
+  "链接包含色值，打开即可还原；不会包含原始图片。": "The link restores these colors. It never includes the source image.",
+  "下载文本": "Download text",
+  "导出图片": "Export PNG",
+  "复制": "Copy",
+  "松开以提取配色": "Drop to extract a palette",
+  "请选择支持的图片格式": "Choose a supported image format.",
+  "正在提取配色…": "Extracting colors…",
+  "已复制": "Copied",
+  "请手动复制选中的内容": "Please copy the selected text manually.",
+  "图片导出失败，请重试": "Image export failed. Please try again.",
+  "解锁 {hex}": "Unlock {hex}",
+  "锁定 {hex}": "Lock {hex}",
+  "已提取 {count} 个主色": "Extracted {count} dominant colors",
+  "图片不能超过 20 MB": "Images must be 20 MB or smaller.",
+  "无法分析图片，请换一张重试": "Could not analyze this image. Try another image.",
+  "图片中没有可见颜色": "This image has no visible colors.",
+  "无法读取图片，请换一张重试": "Could not read this image. Try another image.",
+  "分享 {name}": "Share {name}",
+  "这组配色已在收藏中": "This palette is already in your favorites.",
+  "最多收藏 40 组自建配色，请先移除一组": "You have 40 custom palettes. Remove one before adding another.",
+  "配色已加入我的收藏": "Palette added to favorites"
 };
 
 export let locale = 'zh-CN';
@@ -105,7 +150,7 @@ export function setLocale(nextLocale) {
   document.querySelectorAll('[data-i18n]').forEach((element) => {
     element.textContent = t(element.dataset.i18n);
   });
-  for (const attribute of ['aria-label', 'title', 'placeholder', 'content']) {
+  for (const attribute of ['aria-label', 'title', 'placeholder', 'content', 'alt']) {
     document.querySelectorAll(`[data-i18n-${attribute}]`).forEach((element) => {
       element.setAttribute(attribute, t(element.getAttribute(`data-i18n-${attribute}`)));
     });
