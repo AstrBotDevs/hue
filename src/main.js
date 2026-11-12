@@ -7,6 +7,7 @@ import namedColors from './named-colors.json';
 import paletteLibrary from './palettes.json';
 import { clamp, hsvToRgb, rgbToHsv, rgbToHex, hexToRgb, rgbToHsl, readableInk } from './color.js';
 import { ColorPlane } from './plane.js';
+import { t, locale, setLocale } from './i18n.js';
 import './style.css';
 
 const $ = (id) => document.getElementById(id);
@@ -41,6 +42,7 @@ const state = {
   ...rgbToHsv(...hexToRgb(initialHex)),
   zoom: 1, x: 0, y: 0,
   dark: stored.dark === true,
+  locale: ['en', 'zh-CN'].includes(stored.locale) ? stored.locale : (navigator.language.toLowerCase().startsWith('zh') ? 'zh-CN' : 'en'),
   recent: Array.isArray(stored.recent) ? stored.recent.filter(validHex).slice(0, 8) : [initialHex],
   savedColors: Array.isArray(stored.savedColors) ? stored.savedColors.filter(validHex).slice(0, 40) : [],
   savedPalettes: Array.isArray(stored.savedPalettes) ? stored.savedPalettes.filter((id) => paletteLibrary.some((p) => p.id === id)) : [],
@@ -64,7 +66,7 @@ function toast(message) {
 
 function persist() {
   try {
-    localStorage.setItem('hue-studio', JSON.stringify({ color: colorHex, dark: state.dark, recent: state.recent, savedColors: state.savedColors, savedPalettes: state.savedPalettes }));
+    localStorage.setItem('hue-studio', JSON.stringify({ color: colorHex, dark: state.dark, locale: state.locale, recent: state.recent, savedColors: state.savedColors, savedPalettes: state.savedPalettes }));
   } catch { /* The picker also works when browser storage is unavailable. */ }
 }
 
@@ -78,8 +80,8 @@ function updateTheme() {
   applyTheme(themeFromSourceColor(argbFromHex(colorHex)), { target: document.documentElement, dark: state.dark });
   document.documentElement.style.colorScheme = state.dark ? 'dark' : 'light';
   $('theme-toggle').innerHTML = icon(state.dark ? 'sun' : 'moon');
-  $('theme-toggle').setAttribute('aria-label', state.dark ? '切换浅色模式' : '切换深色模式');
-  $('theme-toggle').title = state.dark ? '切换浅色模式' : '切换深色模式';
+  $('theme-toggle').setAttribute('aria-label', t(state.dark ? '切换浅色模式' : '切换深色模式'));
+  $('theme-toggle').title = t(state.dark ? '切换浅色模式' : '切换深色模式');
   document.querySelector('meta[name="theme-color"]').content = state.dark ? '#1c1b1f' : '#f7f2fa';
 }
 
@@ -115,10 +117,11 @@ function render() {
     const exactName = nearest.hex === colorHex;
     $('color-family').textContent = nearest.name;
     $('color-family').lang = nearest.group === 'css' ? 'en' : 'zh-CN';
-    $('color-family').title = `${exactName ? '' : '最接近的命名色：'}${nearest.name} ${nearest.hex} · 点击打开颜色大全`;
+    $('color-family').title = `${exactName ? '' : t('最接近的命名色：')}${nearest.name} ${nearest.hex} · ${t('点击打开颜色大全')}`;
     $('save-color').classList.toggle('saved', state.savedColors.includes(colorHex));
     $('save-color').setAttribute('aria-pressed', String(state.savedColors.includes(colorHex)));
-    $('save-color').setAttribute('aria-label', state.savedColors.includes(colorHex) ? '取消收藏当前颜色' : '收藏当前颜色');
+    $('save-color').setAttribute('aria-label', t(state.savedColors.includes(colorHex) ? '取消收藏当前颜色' : '收藏当前颜色'));
+    $('save-color').title = $('save-color').getAttribute('aria-label');
     $('hue').value = state.h;
     $('hue').style.setProperty('--thumb-color', `hsl(${state.h} 100% 50%)`);
     $('hue-value').innerHTML = `${Math.round(state.h)}<span>°</span>`;
@@ -158,12 +161,12 @@ function renderRecent() {
     const button = document.createElement('button');
     button.style.background = hex;
     button.title = hex;
-    button.setAttribute('aria-label', `选择最近的颜色 ${hex}`);
+    button.setAttribute('aria-label', t('选择最近的颜色 {hex}', { hex }));
     button.classList.toggle('current', hex === colorHex);
     button.addEventListener('click', () => selectHex(hex));
     $('recent-colors').append(button);
   }
-  if (!state.recent.length) $('recent-colors').innerHTML = '<p class="empty-state">下一次发现，从这里开始。</p>';
+  if (!state.recent.length) $('recent-colors').innerHTML = `<p class="empty-state">${t('下一次发现，从这里开始。')}</p>`;
 }
 
 function commitColor() {
@@ -213,7 +216,7 @@ function renderPalettes() {
     button.setAttribute('aria-pressed', String(button.dataset.style === state.paletteStyle));
   });
   $('palette-pagination').hidden = state.tab === 'saved';
-  $('palette-page').textContent = `${state.paletteOffset + 1}–${Math.min(state.paletteOffset + 3, filtered.length)} / ${filtered.length} 组`;
+  $('palette-page').textContent = t('{range} / {total} 组', { range: `${state.paletteOffset + 1}–${Math.min(state.paletteOffset + 3, filtered.length)}`, total: filtered.length });
   $('palette-prev').disabled = state.paletteOffset === 0;
   $('palette-next').disabled = state.paletteOffset + 3 >= filtered.length;
   if (state.tab === 'saved' && state.savedColors.length) {
@@ -222,7 +225,7 @@ function renderPalettes() {
     for (const hex of state.savedColors) {
       const chip = document.createElement('div');
       chip.className = 'saved-chip';
-      chip.innerHTML = `<button style="background:${hex};color:${readableInk(hexToRgb(hex))}" aria-label="选择 ${hex}">${hex}</button><button aria-label="取消收藏 ${hex}" title="取消收藏">×</button>`;
+      chip.innerHTML = `<button style="background:${hex};color:${readableInk(hexToRgb(hex))}" aria-label="${t('选择 {hex}', { hex })}">${hex}</button><button aria-label="${t('取消收藏 {name}', { name: hex })}" title="${t('取消收藏')}">×</button>`;
       chip.firstChild.addEventListener('click', () => selectHex(hex));
       chip.lastChild.addEventListener('click', () => {
         state.savedColors = state.savedColors.filter((color) => color !== hex);
@@ -236,16 +239,17 @@ function renderPalettes() {
     const card = document.createElement('article');
     card.className = 'palette';
     const saved = state.savedPalettes.includes(palette.id);
-    card.innerHTML = `<div class="palette-colors">${palette.colors.map((hex) => `<button style="background:${hex};color:${readableInk(hexToRgb(hex))}" title="${hex}" aria-label="选择 ${palette.name} 中的 ${hex}" data-color="${hex}"></button>`).join('')}</div><div class="palette-meta"><div class="palette-name">${palette.name}<span>${palette.en}</span></div><button class="save-palette ${saved ? 'saved' : ''}" aria-label="${saved ? '取消收藏' : '收藏'}${palette.name}" aria-pressed="${saved}" title="${saved ? '取消收藏' : '收藏配色'}">${icon('heart')}</button></div>`;
+    const name = locale === 'en' ? palette.en : palette.name;
+    card.innerHTML = `<div class="palette-colors">${palette.colors.map((hex) => `<button style="background:${hex};color:${readableInk(hexToRgb(hex))}" title="${hex}" aria-label="${t('选择 {name} 中的 {hex}', { name, hex })}" data-color="${hex}"></button>`).join('')}</div><div class="palette-meta"><div class="palette-name">${name}<span lang="${locale === 'en' ? 'zh-CN' : 'en'}">${locale === 'en' ? palette.name : palette.en}</span></div><button class="save-palette ${saved ? 'saved' : ''}" aria-label="${t(saved ? '取消收藏 {name}' : '收藏 {name}', { name })}" aria-pressed="${saved}" title="${t(saved ? '取消收藏' : '收藏配色')}">${icon('heart')}</button></div>`;
     card.querySelectorAll('[data-color]').forEach((button) => button.addEventListener('click', () => selectHex(button.dataset.color)));
     card.querySelector('.save-palette').addEventListener('click', () => {
       state.savedPalettes = saved ? state.savedPalettes.filter((id) => id !== palette.id) : [...state.savedPalettes, palette.id];
       renderPalettes(); persist();
-      toast(saved ? '已取消收藏' : `已收藏「${palette.name}」`);
+      toast(saved ? t('已取消收藏') : t('已收藏「{name}」', { name }));
     });
     holder.append(card);
   }
-  if (state.tab === 'saved' && !palettes.length && !state.savedColors.length) holder.innerHTML = '<p class="empty-state">把心动的颜色留下来。<br>点击色卡上的书签，或配色旁的爱心。</p>';
+  if (state.tab === 'saved' && !palettes.length && !state.savedColors.length) holder.innerHTML = `<p class="empty-state">${t('把心动的颜色留下来。')}<br>${t('点击色卡上的书签，或配色旁的爱心。')}</p>`;
   scroller.scrollTop = scrollTop;
 }
 
@@ -407,19 +411,37 @@ $('fullscreen').addEventListener('click', async () => {
   try {
     if (document.fullscreenElement) await document.exitFullscreen();
     else if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
-    else toast('当前浏览器不支持全屏，请使用浏览器全屏功能');
-  } catch { toast('无法进入全屏，请使用浏览器全屏功能'); }
+    else toast(t('当前浏览器不支持全屏，请使用浏览器全屏功能'));
+  } catch { toast(t('无法进入全屏，请使用浏览器全屏功能')); }
 });
 document.addEventListener('fullscreenchange', () => {
   $('fullscreen').innerHTML = icon(document.fullscreenElement ? 'collapse' : 'expand');
-  $('fullscreen').setAttribute('aria-label', document.fullscreenElement ? '退出全屏' : '进入全屏');
-  $('fullscreen').title = document.fullscreenElement ? '退出全屏' : '全屏';
+  $('fullscreen').setAttribute('aria-label', t(document.fullscreenElement ? '退出全屏' : '进入全屏'));
+  $('fullscreen').title = t(document.fullscreenElement ? '退出全屏' : '全屏');
+});
+$('language-toggle').addEventListener('click', () => {
+  const scroller = document.querySelector('.sidebar-content');
+  const scrollTop = scroller.scrollTop;
+  state.locale = locale === 'en' ? 'zh-CN' : 'en';
+  setLocale(state.locale);
+  lastThemeKey = '';
+  colorDirty = true;
+  render();
+  updateTheme();
+  $('fullscreen').setAttribute('aria-label', t(document.fullscreenElement ? '退出全屏' : '进入全屏'));
+  $('fullscreen').title = t(document.fullscreenElement ? '退出全屏' : '全屏');
+  renderPalettes();
+  renderRecent();
+  renderLibrary();
+  $('toast').classList.remove('visible');
+  scroller.scrollTop = scrollTop;
+  persist();
 });
 $('theme-toggle').addEventListener('click', () => { state.dark = !state.dark; updateTheme(); persist(); });
 
 async function copy(value) {
-  try { await navigator.clipboard.writeText(value); toast(`已复制 ${value}`); }
-  catch { toast('复制未获允许，请选中色值后手动复制'); $('hex-input').focus(); $('hex-input').select(); }
+  try { await navigator.clipboard.writeText(value); toast(t('已复制 {value}', { value })); }
+  catch { toast(t('复制未获允许，请选中色值后手动复制')); $('hex-input').focus(); $('hex-input').select(); }
 }
 $('copy-hex').addEventListener('click', () => copy(colorHex));
 $('copy-rgb').addEventListener('click', () => copy(`rgb(${colorRgb.join(', ')})`));
@@ -441,7 +463,7 @@ for (const format of ['rgb', 'hsl']) {
     const validRange = values.every((value, index) => Number.isFinite(value) && value >= 0 && value <= (format === 'rgb' ? 255 : index === 0 ? 360 : 100));
     if (!validSyntax || !validRange) {
       input.setAttribute('aria-invalid', 'true'); input.parentElement.classList.add('invalid');
-      toast(format === 'rgb' ? 'RGB 请填写三个 0–255 的整数，例如 189,147,63' : 'HSL 色相为 0–360，饱和度和亮度为 0–100，例如 40,50%,49%');
+      toast(t(format === 'rgb' ? 'RGB 请填写三个 0–255 的整数，例如 189,147,63' : 'HSL 色相为 0–360，饱和度和亮度为 0–100，例如 40,50%,49%'));
       return;
     }
     if (format === 'rgb') selectHex(rgbToHex(values));
@@ -467,7 +489,7 @@ $('hex-input').addEventListener('blur', (event) => {
   if (!/^[\da-f]{6}$/i.test(value)) {
     event.target.setAttribute('aria-invalid', 'true');
     document.querySelector('.hex-field').classList.add('invalid');
-    toast('请输入 3 位或 6 位 HEX 色值，例如 #8B7AE8');
+    toast(t('请输入 3 位或 6 位 HEX 色值，例如 #8B7AE8'));
     return;
   }
   selectHex(`#${value.toUpperCase()}`);
@@ -486,13 +508,13 @@ $('hex-input').addEventListener('keydown', (event) => {
 if (!('EyeDropper' in window)) $('eyedropper').hidden = true;
 $('eyedropper').addEventListener('click', async () => {
   try { const result = await new window.EyeDropper().open(); selectHex(result.sRGBHex); }
-  catch (error) { if (error.name !== 'AbortError') toast('当前浏览器无法使用屏幕取色'); }
+  catch (error) { if (error.name !== 'AbortError') toast(t('当前浏览器无法使用屏幕取色')); }
 });
 $('save-color').addEventListener('click', () => {
   const saved = state.savedColors.includes(colorHex);
-  if (!saved && state.savedColors.length >= 40) { toast('已收藏 40 个颜色，请先移除一个'); return; }
+  if (!saved && state.savedColors.length >= 40) { toast(t('已收藏 40 个颜色，请先移除一个')); return; }
   state.savedColors = saved ? state.savedColors.filter((hex) => hex !== colorHex) : [...state.savedColors, colorHex];
-  schedule({ color: true }); renderPalettes(); persist(); toast(saved ? '已取消收藏' : `已收藏 ${colorHex}`);
+  schedule({ color: true }); renderPalettes(); persist(); toast(saved ? t('已取消收藏') : t('已收藏 {hex}', { hex: colorHex }));
 });
 $('shuffle-palettes').addEventListener('click', () => {
   const count = paletteLibrary.filter((palette) => state.paletteStyle === 'all' || palette.category === state.paletteStyle).length;
@@ -511,12 +533,12 @@ $('clear-recent').addEventListener('click', () => { state.recent = []; renderRec
 function renderLibrary() {
   const query = $('color-search').value.trim().toLowerCase();
   const matches = namedColors.filter((color) => (libraryGroup === 'all' || color.group === libraryGroup) && `${color.name} ${color.alias} ${color.hex}`.toLowerCase().includes(query));
-  $('library-results-count').textContent = `${matches.length} 色`;
+  $('library-results-count').textContent = t('{count} 色', { count: matches.length });
   const fragment = document.createDocumentFragment();
   for (const color of matches.slice(0, libraryLimit)) {
     const button = document.createElement('button');
     button.className = 'library-color';
-    button.setAttribute('aria-label', `选择 ${color.name} ${color.hex}`);
+    button.setAttribute('aria-label', t('选择 {name} {hex}', { name: color.name, hex: color.hex }));
     button.innerHTML = '<span class="library-swatch"></span><span class="library-color-name"></span><code></code>';
     button.querySelector('.library-swatch').style.background = color.hex;
     button.querySelector('.library-color-name').textContent = color.name;
@@ -529,7 +551,7 @@ function renderLibrary() {
     fragment.append(button);
   }
   $('library-grid').replaceChildren(fragment);
-  if (!matches.length) $('library-grid').innerHTML = '<p class="library-empty">没有匹配的颜色，试试其他名称或色值。</p>';
+  if (!matches.length) $('library-grid').innerHTML = `<p class="library-empty">${t('没有匹配的颜色，试试其他名称或色值。')}</p>`;
   $('library-more').hidden = matches.length <= libraryLimit;
   document.querySelectorAll('[data-group]').forEach((button) => {
     button.classList.toggle('active', button.dataset.group === libraryGroup);
@@ -562,6 +584,7 @@ document.addEventListener('keydown', (event) => {
 mobile.addEventListener('change', syncSidebar);
 new ResizeObserver(() => schedule({ plane: true })).observe(canvas);
 syncSidebar();
+setLocale(state.locale);
 render();
 updateTheme();
 renderPalettes();

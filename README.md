@@ -5,6 +5,7 @@ A full-window color picker with a Material You interface, an HSV canvas, and flo
 - GPU rendering on demand, with a Canvas 2D fallback.
 - Editable HEX, RGB, and HSL values, plus clipboard copying.
 - Dynamic themes, light/dark appearance, and screen picking in supported browsers.
+- English and Chinese interfaces with a saved language preference; first visit follows the browser language. Traditional Chinese color names retain their original names.
 - 807 named colors searchable by name, pinyin, or HEX.
 - 48 five-color palettes across six styles, with favorites and recent colors stored locally.
 - Locally bundled Outfit, Noto Serif SC Light, and Cormorant Garamond Light fonts.
